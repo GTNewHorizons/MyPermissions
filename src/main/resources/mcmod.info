@@ -1,10 +1,10 @@
 [
 {
-  "modid": "MyPermissions",
-  "name": "MyPermissions",
+  "modid": "${modId}",
+  "name": "${modName}",
   "description": "Universial Permission System.",
-  "version": "${mod_version}",
-  "mcversion": "${minecraft_version}",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
   "url": "",
   "updateUrl": "",
   "authorList": [

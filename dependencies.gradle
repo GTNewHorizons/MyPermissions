@@ -1,0 +1,11 @@
+// Add your dependencies here
+
+dependencies {
+    compile("com.github.GTNewHorizons:MyEssentials-Core:master-SNAPSHOT:dev")
+
+    compileOnly("com.forgeessentials:forgeessentials:1.4.5-SNAPSHOT:dev") {
+        transitive = false
+    }
+
+    compileOnly files("dependencies/bukkit-1.7.9-R0.2.jar")
+}

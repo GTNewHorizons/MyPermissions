@@ -1,0 +1,15 @@
+// Add any additional repositories for your dependencies here
+
+repositories {
+    maven {
+        name = "sk89q"
+        url = "http://maven.sk89q.com/artifactory/repo/"
+    }
+    maven {
+        name = "SpongePowered"
+        url = "https://repo.spongepowered.org/maven"
+    }
+    maven {
+        url = "https://jitpack.io"
+    }
+}

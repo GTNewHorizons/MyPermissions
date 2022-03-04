@@ -2,14 +2,21 @@
 
 repositories {
     maven {
-        name = "sk89q"
-        url = "http://maven.sk89q.com/artifactory/repo/"
+        name 'GTNH Maven'
+        url 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
+        allowInsecureProtocol
     }
     maven {
-        name = "SpongePowered"
-        url = "https://repo.spongepowered.org/maven"
+        url 'https://cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
     }
     maven {
-        url = "https://jitpack.io"
+        url 'https://maven.elmakers.com/repository/'
+    }
+    maven {
+        name 'SpongePowered'
+        url 'https://repo.spongepowered.org/maven'
     }
 }

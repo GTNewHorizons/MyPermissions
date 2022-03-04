@@ -1,17 +1,22 @@
-[
 {
-  "modid": "${modId}",
-  "name": "${modName}",
-  "description": "Universial Permission System.",
-  "version": "${modVersion}",
-  "mcversion": "${minecraftVersion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": [
-    "Legobear154",
-    "AfterWind",
-    "Dariusc93"
-  ],
-  "credits": "Legobear154, AfterWind, and Dariusc93"
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "Universial Permission System",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": [
+			"Legobear154",
+			"AfterWind",
+			"Dariusc93"
+		],
+		"credits": "This is the GTNH fork",
+		"requiredMods": ["Forge", "MyEssentials-Core"],
+		"dependencies": ["MyEssentials_Core"],
+		"dependants": ["MyTown2"],
+		"useDependencyInformation": true
+	}]
 }
-]

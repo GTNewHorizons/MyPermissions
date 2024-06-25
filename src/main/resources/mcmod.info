@@ -13,10 +13,6 @@
 			"AfterWind",
 			"Dariusc93"
 		],
-		"credits": "This is the GTNH fork",
-		"requiredMods": ["Forge", "MyEssentials-Core"],
-		"dependencies": ["MyEssentials_Core"],
-		"dependants": ["MyTown2"],
-		"useDependencyInformation": true
+		"credits": "This is the GTNH fork"
 	}]
 }

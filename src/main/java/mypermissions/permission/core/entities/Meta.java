@@ -1,11 +1,12 @@
 package mypermissions.permission.core.entities;
 
-import com.google.gson.*;
-import myessentials.json.api.SerializerTemplate;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.google.gson.*;
+
+import myessentials.json.api.SerializerTemplate;
 
 /**
  * Variables inside permission strings.
@@ -23,8 +24,8 @@ public class Meta {
     public static class Container extends ArrayList<Meta> {
 
         public Meta get(String permission) {
-            for(Meta item : this) {
-                if(item.permission.equals(permission)) {
+            for (Meta item : this) {
+                if (item.permission.equals(permission)) {
                     return item;
                 }
             }
@@ -32,7 +33,8 @@ public class Meta {
         }
 
         /**
-         * Since Meta is represented by a "key":value format in Json it needs to stay in the Container rather than in the Meta class
+         * Since Meta is represented by a "key":value format in Json it needs to stay in the Container rather than in
+         * the Meta class
          */
         public static class Serializer extends SerializerTemplate<Container> {
 
@@ -42,12 +44,17 @@ public class Meta {
             }
 
             @Override
-            public Container deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            public Container deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
                 JsonObject jsonObject = json.getAsJsonObject();
 
                 Container container = new Container();
                 for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                    container.add(new Meta(entry.getKey(), entry.getValue().getAsInt()));
+                    container.add(
+                        new Meta(
+                            entry.getKey(),
+                            entry.getValue()
+                                .getAsInt()));
                 }
 
                 return container;

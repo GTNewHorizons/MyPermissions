@@ -1,10 +1,11 @@
 package mypermissions.permission.core.bridge;
 
-import mypermissions.MyPermissions;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import java.lang.reflect.Method;
 import java.util.UUID;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import mypermissions.MyPermissions;
 
 public class ServerToolsPermissionBridge implements IPermissionBridge {
 
@@ -23,7 +24,7 @@ public class ServerToolsPermissionBridge implements IPermissionBridge {
     public boolean hasPermission(UUID uuid, String permission) {
         boolean result;
 
-        //MyPermissions.instance.LOG.error("Testing permission: " + permission);
+        // MyPermissions.instance.LOG.error("Testing permission: " + permission);
         try {
             result = (Boolean) serverToolsManagerMethod.invoke(null, permission, uuid);
         } catch (Exception ex) {
@@ -38,7 +39,7 @@ public class ServerToolsPermissionBridge implements IPermissionBridge {
             String[] nodes = permission.split("\\.");
             for (int i = 0; i < nodes.length - 1; i++) {
                 lastNode = lastNode + nodes[i] + ".";
-                //MyPermissions.instance.LOG.error("Testing permission: " + lastNode + "*");
+                // MyPermissions.instance.LOG.error("Testing permission: " + lastNode + "*");
                 try {
                     if ((Boolean) serverToolsManagerMethod.invoke(null, lastNode + "*", uuid)) {
                         result = true;

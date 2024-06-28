@@ -1,9 +1,8 @@
 package mypermissions.command.core.entities;
 
-import myessentials.localization.api.Local;
-import myessentials.entities.api.Tree;
-import mypermissions.permission.core.bridge.IPermissionBridge;
-import mypermissions.permission.api.proxy.PermissionProxy;
+import java.util.List;
+import java.util.UUID;
+
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBlockLogic;
@@ -11,8 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.List;
-import java.util.UUID;
+import myessentials.entities.api.Tree;
+import myessentials.localization.api.Local;
+import mypermissions.permission.api.proxy.PermissionProxy;
+import mypermissions.permission.core.bridge.IPermissionBridge;
 
 public class CommandTree extends Tree<CommandTreeNode> {
 
@@ -36,7 +37,7 @@ public class CommandTree extends Tree<CommandTreeNode> {
             args = args.subList(1, args.size());
         }
 
-        if(hasPermission(sender, node)) {
+        if (hasPermission(sender, node)) {
             node.commandCall(sender, args);
         }
     }
@@ -65,28 +66,34 @@ public class CommandTree extends Tree<CommandTreeNode> {
     }
 
     public boolean hasCommandNode(CommandTreeNode current, String perm) {
-        if(perm.equals(current.getAnnotation().permission()))
+        if (perm.equals(
+            current.getAnnotation()
+                .permission()))
             return true;
 
         boolean exists = false;
-        for(CommandTreeNode child : current.getChildren()) {
-            if(hasCommandNode(child, perm))
-                return true;
+        for (CommandTreeNode child : current.getChildren()) {
+            if (hasCommandNode(child, perm)) return true;
         }
         return false;
     }
 
     public boolean hasPermission(ICommandSender sender, CommandTreeNode node) throws CommandException {
-        if(!node.getAnnotation().console() && (sender instanceof MinecraftServer || sender instanceof RConConsoleSource || sender instanceof CommandBlockLogic)) {
+        if (!node.getAnnotation()
+            .console()
+            && (sender instanceof MinecraftServer || sender instanceof RConConsoleSource
+                || sender instanceof CommandBlockLogic)) {
             throw new CommandException("commands.generic.permission");
         }
 
-        if(sender instanceof EntityPlayer) {
+        if (sender instanceof EntityPlayer) {
             UUID uuid = ((EntityPlayer) sender).getUniqueID();
-            String permission = node.getAnnotation().permission();
+            String permission = node.getAnnotation()
+                .permission();
 
-            if (PermissionProxy.getPermissionManager().hasPermission(uuid, permission) ||
-               (customManager != null && customManager.hasPermission(uuid, permission))) {
+            if (PermissionProxy.getPermissionManager()
+                .hasPermission(uuid, permission)
+                || (customManager != null && customManager.hasPermission(uuid, permission))) {
                 return true;
             }
             throw new CommandException("commands.generic.permission");

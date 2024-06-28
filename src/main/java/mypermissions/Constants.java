@@ -1,6 +1,7 @@
 package mypermissions;
 
 public class Constants {
+
     public static final String VERSION = "GRADLETOKEN_VERSION";
     public static final String MODID = "MyPermissions";
     public static final String MODNAME = MODID;

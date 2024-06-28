@@ -8,10 +8,12 @@ import net.minecraft.server.MinecraftServer;
  * Standard vanilla command registrar
  */
 public class VanillaCommandRegistrar implements ICommandRegistrar {
+
     protected CommandHandler commandHandler;
 
     public VanillaCommandRegistrar() {
-        this.commandHandler = (CommandHandler) MinecraftServer.getServer().getCommandManager();
+        this.commandHandler = (CommandHandler) MinecraftServer.getServer()
+            .getCommandManager();
     }
 
     @Override

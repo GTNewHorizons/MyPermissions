@@ -1,18 +1,20 @@
 package mypermissions.permission.core.entities;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.*;
+
 import myessentials.chat.api.ChatComponentFormatted;
 import myessentials.chat.api.IChatFormat;
 import myessentials.json.api.SerializerTemplate;
 import myessentials.localization.api.LocalManager;
 import mypermissions.permission.core.container.PermissionsContainer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * A set of permissions that is assigned to players.
@@ -79,15 +81,19 @@ public class Group implements IChatFormat {
         }
 
         @Override
-        public Group deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public Group deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
             JsonObject jsonObject = json.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
+            String name = jsonObject.get("name")
+                .getAsString();
             Group group = new Group(name);
             if (jsonObject.has("permissions")) {
-                group.permsContainer.addAll(ImmutableList.copyOf(context.<String[]>deserialize(jsonObject.get("permissions"), String[].class)));
+                group.permsContainer.addAll(
+                    ImmutableList.copyOf(context.<String[]>deserialize(jsonObject.get("permissions"), String[].class)));
             }
             if (jsonObject.has("meta")) {
-                group.metaContainer.addAll(context.<Meta.Container>deserialize(jsonObject.get("meta"), Meta.Container.class));
+                group.metaContainer
+                    .addAll(context.<Meta.Container>deserialize(jsonObject.get("meta"), Meta.Container.class));
             }
             return group;
         }
@@ -107,7 +113,8 @@ public class Group implements IChatFormat {
         public void remove(String groupName) {
             for (Iterator<Group> it = iterator(); it.hasNext();) {
                 Group group = it.next();
-                if (group.getName().equals(groupName)) {
+                if (group.getName()
+                    .equals(groupName)) {
                     it.remove();
                     return;
                 }
@@ -116,16 +123,16 @@ public class Group implements IChatFormat {
 
         public boolean contains(String groupName) {
             for (Group group : this) {
-                if (group.getName().equals(groupName))
-                    return true;
+                if (group.getName()
+                    .equals(groupName)) return true;
             }
             return false;
         }
 
         public Group get(String groupName) {
             for (Group group : this) {
-                if (group.getName().equals(groupName))
-                    return group;
+                if (group.getName()
+                    .equals(groupName)) return group;
             }
             return null;
         }
@@ -135,7 +142,8 @@ public class Group implements IChatFormat {
             IChatComponent root = new ChatComponentText("");
 
             for (Group group : this) {
-                if (root.getSiblings().size() > 0) {
+                if (root.getSiblings()
+                    .size() > 0) {
                     root.appendSibling(new ChatComponentFormatted("{7|, }"));
                 }
                 root.appendSibling(group.toChatMessage());

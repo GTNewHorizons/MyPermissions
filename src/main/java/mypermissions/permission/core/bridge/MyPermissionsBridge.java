@@ -1,12 +1,12 @@
 package mypermissions.permission.core.bridge;
 
+import java.util.UUID;
+
 import mypermissions.Constants;
-import mypermissions.permission.core.entities.Group;
-import mypermissions.permission.core.entities.User;
 import mypermissions.permission.core.config.GroupConfig;
 import mypermissions.permission.core.config.UserConfig;
-
-import java.util.UUID;
+import mypermissions.permission.core.entities.Group;
+import mypermissions.permission.core.entities.User;
 
 public class MyPermissionsBridge implements IPermissionBridge {
 
@@ -18,8 +18,7 @@ public class MyPermissionsBridge implements IPermissionBridge {
     public final GroupConfig groupConfig = new GroupConfig(Constants.CONFIG_FOLDER + "GroupConfig.json", this);
     public final UserConfig userConfig = new UserConfig(Constants.CONFIG_FOLDER + "UserConfig.json", this);
 
-    public MyPermissionsBridge() {
-    }
+    public MyPermissionsBridge() {}
 
     public void loadConfigs() {
         groups.clear();

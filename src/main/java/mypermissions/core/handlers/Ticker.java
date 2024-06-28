@@ -1,17 +1,18 @@
 package mypermissions.core.handlers;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import mypermissions.command.api.CommandManager;
-import mypermissions.permission.core.entities.User;
-import mypermissions.permission.core.bridge.MyPermissionsBridge;
-import mypermissions.permission.api.proxy.PermissionProxy;
+import java.util.UUID;
+
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.CommandEvent;
 
-import java.util.UUID;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import mypermissions.command.api.CommandManager;
+import mypermissions.permission.api.proxy.PermissionProxy;
+import mypermissions.permission.core.bridge.MyPermissionsBridge;
+import mypermissions.permission.core.entities.User;
 
 public class Ticker {
 
@@ -19,15 +20,16 @@ public class Ticker {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent ev) {
-        if(PermissionProxy.getPermissionManager() instanceof MyPermissionsBridge) {
+        if (PermissionProxy.getPermissionManager() instanceof MyPermissionsBridge) {
             MyPermissionsBridge manager = (MyPermissionsBridge) PermissionProxy.getPermissionManager();
 
-            UUID uuid = ev.player.getGameProfile().getId();
-            if(manager.users.get(uuid) == null) {
+            UUID uuid = ev.player.getGameProfile()
+                .getId();
+            if (manager.users.get(uuid) == null) {
                 manager.users.add(uuid);
                 manager.users.updateLastPlayerName(uuid);
                 manager.saveUsers();
-            } else if(manager.users.updateLastPlayerName(uuid)) {
+            } else if (manager.users.updateLastPlayerName(uuid)) {
                 manager.saveUsers();
             }
         }
@@ -35,15 +37,18 @@ public class Ticker {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onCommandExecuted(CommandEvent ev) {
-        if(PermissionProxy.getPermissionManager() instanceof MyPermissionsBridge && ev.sender instanceof EntityPlayer) {
+        if (PermissionProxy.getPermissionManager() instanceof MyPermissionsBridge
+            && ev.sender instanceof EntityPlayer) {
             MyPermissionsBridge manager = (MyPermissionsBridge) PermissionProxy.getPermissionManager();
-            User user = manager.users.get(((EntityPlayer) ev.sender).getGameProfile().getId());
+            User user = manager.users.get(
+                ((EntityPlayer) ev.sender).getGameProfile()
+                    .getId());
 
             String permission = CommandManager.getPermForCommand(ev.command.getCommandName());
-            if(permission == null) {
+            if (permission == null) {
                 permission = "cmd." + ev.command.getCommandName();
             }
-            if(!user.hasPermission(permission)) {
+            if (!user.hasPermission(permission)) {
                 ev.setCanceled(true);
                 ev.exception = new CommandException("commands.generic.permission");
             }

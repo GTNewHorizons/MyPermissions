@@ -5,9 +5,6 @@ import myessentials.chat.api.ChatComponentFormatted;
 import myessentials.chat.api.ChatComponentMultiPage;
 import myessentials.localization.api.LocalManager;
 import mypermissions.command.core.entities.CommandTreeNode;
-import net.minecraft.util.IChatComponent;
-
-import java.util.List;
 
 public class ChatComponentHelpMenu extends ChatComponentMultiPage {
 
@@ -22,7 +19,13 @@ public class ChatComponentHelpMenu extends ChatComponentMultiPage {
     public void construct() {
 
         for (CommandTreeNode subCommand : command.getChildren()) {
-            this.add(new ChatComponentFormatted("{7| %s << %s}", subCommand.getCommandLine(), LocalManager.get(subCommand.getAnnotation().permission() + ".help")));
+            this.add(
+                new ChatComponentFormatted(
+                    "{7| %s << %s}",
+                    subCommand.getCommandLine(),
+                    LocalManager.get(
+                        subCommand.getAnnotation()
+                            .permission() + ".help")));
         }
 
     }

@@ -12,7 +12,7 @@ public class CommandCompletion {
     public static List<String> getCompletionList(String key) {
         List<String> completionList = completionMap.get(key);
 
-        if(completionList == null) {
+        if (completionList == null) {
             completionList = new ArrayList<String>();
             completionMap.put(key, completionList);
         }
@@ -31,11 +31,11 @@ public class CommandCompletion {
     public static void removeCompletion(String key, String completion) {
         List<String> completionList = completionMap.get(key);
 
-        if(completionList == null)
-            return;
+        if (completionList == null) return;
 
-        for(Iterator<String> it = completionList.iterator(); it.hasNext(); ) {
-            if(it.next().equals(completion)) {
+        for (Iterator<String> it = completionList.iterator(); it.hasNext();) {
+            if (it.next()
+                .equals(completion)) {
                 it.remove();
                 return;
             }

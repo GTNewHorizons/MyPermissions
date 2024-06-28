@@ -1,10 +1,11 @@
 package mypermissions.permission.core.bridge;
 
-import myessentials.utils.PlayerUtils;
+import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.permission.PermissionManager;
 
-import java.util.UUID;
+import myessentials.utils.PlayerUtils;
 
 public class ForgeEssentialsPermissionBridge implements IPermissionBridge {
 

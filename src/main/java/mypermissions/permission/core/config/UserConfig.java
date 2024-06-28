@@ -1,12 +1,12 @@
 package mypermissions.permission.core.config;
 
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
+
 import myessentials.json.api.JsonConfig;
+import mypermissions.permission.core.bridge.MyPermissionsBridge;
 import mypermissions.permission.core.entities.Meta;
 import mypermissions.permission.core.entities.User;
-import mypermissions.permission.core.bridge.MyPermissionsBridge;
 
 public class UserConfig extends JsonConfig<User, User.Container> {
 
@@ -16,10 +16,10 @@ public class UserConfig extends JsonConfig<User, User.Container> {
         super(path, "UserConfig");
         this.permissionsManager = permissionsManager;
         this.gsonType = new TypeToken<User.Container>() {}.getType();
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new User.Serializer())
-                .registerTypeAdapter(Meta.Container.class, new Meta.Container.Serializer())
-                .setPrettyPrinting().create();
+        this.gson = new GsonBuilder().registerTypeAdapter(User.class, new User.Serializer())
+            .registerTypeAdapter(Meta.Container.class, new Meta.Container.Serializer())
+            .setPrettyPrinting()
+            .create();
     }
 
     @Override

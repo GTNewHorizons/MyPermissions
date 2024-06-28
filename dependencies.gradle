@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile('com.github.GTNewHorizons:MyEssentials-Core:1.19r:dev')
+    compile('com.github.GTNewHorizons:MyEssentials-Core:1.20r:dev')
 
     compileOnly('com.forgeessentials:forgeessentials:1.4.6-SNAPSHOT:dev') {transitive = false}
     compileOnly('org.bukkit:bukkit:1.7.9-R0.2')

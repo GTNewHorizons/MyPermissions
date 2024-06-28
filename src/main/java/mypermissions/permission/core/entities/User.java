@@ -1,7 +1,16 @@
 package mypermissions.permission.core.entities;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.UUID;
+
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
+import net.minecraftforge.common.UsernameCache;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.*;
+
 import myessentials.chat.api.ChatComponentFormatted;
 import myessentials.chat.api.IChatFormat;
 import myessentials.json.api.SerializerTemplate;
@@ -11,13 +20,6 @@ import mypermissions.core.config.Config;
 import mypermissions.permission.api.proxy.PermissionProxy;
 import mypermissions.permission.core.bridge.MyPermissionsBridge;
 import mypermissions.permission.core.container.PermissionsContainer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.UsernameCache;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * A wrapper around the EntityPlayer with additional objects for permissions
@@ -49,8 +51,8 @@ public class User implements IChatFormat {
             return false;
         }
 
-        return (group != null && group.hasPermission(permission) == PermissionLevel.ALLOWED) ||
-               (Config.instance.fullAccessForOPS.get() && PlayerUtils.isOp(uuid));
+        return (group != null && group.hasPermission(permission) == PermissionLevel.ALLOWED)
+            || (Config.instance.fullAccessForOPS.get() && PlayerUtils.isOp(uuid));
     }
 
     @Override
@@ -67,10 +69,13 @@ public class User implements IChatFormat {
         }
 
         @Override
-        public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
             JsonObject jsonObject = json.getAsJsonObject();
 
-            UUID uuid = UUID.fromString(jsonObject.get("uuid").getAsString());
+            UUID uuid = UUID.fromString(
+                jsonObject.get("uuid")
+                    .getAsString());
             User user = new User(uuid);
             JsonElement lastPlayerName = jsonObject.get("player");
             if (lastPlayerName != null) {
@@ -78,13 +83,16 @@ public class User implements IChatFormat {
             }
             JsonElement group = jsonObject.get("group");
             if (group != null) {
-                user.group = ((MyPermissionsBridge)PermissionProxy.getPermissionManager()).groups.get(group.getAsString());
+                user.group = ((MyPermissionsBridge) PermissionProxy.getPermissionManager()).groups
+                    .get(group.getAsString());
             }
             if (jsonObject.has("permissions")) {
-                user.permsContainer.addAll(ImmutableList.copyOf(context.<String[]>deserialize(jsonObject.get("permissions"), String[].class)));
+                user.permsContainer.addAll(
+                    ImmutableList.copyOf(context.<String[]>deserialize(jsonObject.get("permissions"), String[].class)));
             }
             if (jsonObject.has("meta")) {
-                user.metaContainer.addAll(context.<Meta.Container>deserialize(jsonObject.get("meta"), Meta.Container.class));
+                user.metaContainer
+                    .addAll(context.<Meta.Container>deserialize(jsonObject.get("meta"), Meta.Container.class));
             }
 
             return user;
@@ -115,8 +123,10 @@ public class User implements IChatFormat {
         private Group defaultGroup;
 
         public boolean add(UUID uuid) {
-            if(get(uuid) == null) {
-                Group group = (defaultGroup == null) ? ((MyPermissionsBridge)PermissionProxy.getPermissionManager()).groups.get("default") : defaultGroup;
+            if (get(uuid) == null) {
+                Group group = (defaultGroup == null)
+                    ? ((MyPermissionsBridge) PermissionProxy.getPermissionManager()).groups.get("default")
+                    : defaultGroup;
                 User newUser = new User(uuid, group);
                 add(newUser);
                 return true;
@@ -125,8 +135,8 @@ public class User implements IChatFormat {
         }
 
         public User get(UUID uuid) {
-            for(User user : this) {
-                if(user.uuid.equals(uuid)) {
+            for (User user : this) {
+                if (user.uuid.equals(uuid)) {
                     return user;
                 }
             }
@@ -135,8 +145,8 @@ public class User implements IChatFormat {
 
         public Group getPlayerGroup(UUID uuid) {
 
-            for(User user : this) {
-                if(user.uuid.equals(uuid)) {
+            for (User user : this) {
+                if (user.uuid.equals(uuid)) {
                     return user.group;
                 }
             }
@@ -147,8 +157,8 @@ public class User implements IChatFormat {
         }
 
         public boolean contains(UUID uuid) {
-            for(User user : this) {
-                if(user.uuid.equals(uuid)) {
+            for (User user : this) {
+                if (user.uuid.equals(uuid)) {
                     return true;
                 }
             }
@@ -180,7 +190,8 @@ public class User implements IChatFormat {
             IChatComponent root = new ChatComponentText("");
 
             for (User user : this) {
-                if (root.getSiblings().size() > 0) {
+                if (root.getSiblings()
+                    .size() > 0) {
                     root.appendSibling(new ChatComponentFormatted("{7|, }"));
                 }
                 root.appendSibling(user.toChatMessage());

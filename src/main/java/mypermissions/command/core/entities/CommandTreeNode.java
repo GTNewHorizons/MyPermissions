@@ -1,7 +1,20 @@
 package mypermissions.command.core.entities;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import net.minecraft.command.ICommandSender;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+
 import myessentials.chat.api.ChatManager;
 import myessentials.entities.api.TreeNode;
 import myessentials.localization.api.Local;
@@ -13,16 +26,6 @@ import mypermissions.command.api.CommandResponse;
 import mypermissions.command.api.annotation.Command;
 import mypermissions.command.core.chat.ChatComponentHelpMenu;
 import mypermissions.command.core.exception.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import org.apache.commons.lang.exception.ExceptionUtils;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The declaration is a bit difficult to understand.
@@ -36,18 +39,22 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
 
     private ChatComponentHelpMenu helpMenu;
     private Supplier<String> name = Suppliers.memoizeWithExpiration(new Supplier<String>() {
+
         @Override
         public String get() {
             String key = getLocalizationKey() + ".name";
-            return getLocal().hasLocalization(key) ? getLocal().getLocalization(key).getUnformattedText() : getAnnotation().name();
+            return getLocal().hasLocalization(key) ? getLocal().getLocalization(key)
+                .getUnformattedText() : getAnnotation().name();
         }
     }, 5, TimeUnit.MINUTES);
 
     private Supplier<String> syntax = Suppliers.memoizeWithExpiration(new Supplier<String>() {
+
         @Override
         public String get() {
             String key = getLocalizationKey() + ".syntax";
-            return getLocal().hasLocalization(key) ? getLocal().getLocalization(key).getUnformattedText() : getAnnotation().syntax();
+            return getLocal().hasLocalization(key) ? getLocal().getLocalization(key)
+                .getUnformattedText() : getAnnotation().syntax();
         }
     }, 5, TimeUnit.MINUTES);
 
@@ -63,9 +70,11 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
         String name = getAnnotation().name();
         CommandTreeNode parentNode = this;
         while ((parentNode = parentNode.getParent()) != null) {
-            name = parentNode.getAnnotation().name() + "." + name;
+            name = parentNode.getAnnotation()
+                .name() + "."
+                + name;
         }
-        localizationKey = "command."+name;
+        localizationKey = "command." + name;
     }
 
     public Command getAnnotation() {
@@ -78,32 +87,30 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
 
     public void commandCall(ICommandSender sender, List<String> args) {
 
-
         /*
-        // Check if the player has access to the command using the firstpermissionbreach method first
-        Method permMethod = firstPermissionBreaches.get(permission);
-        if(permMethod != null) {
-            Boolean result = true;
-            try {
-                result = (Boolean)permMethod.invoke(null, permission, sender);
-            } catch (Exception e) {
-                MyEssentialsCore.instance.LOG.error(ExceptionUtils.getStackTrace(e));
-            }
-            if(!result) {
-                // If the first permission breach did not allow the method to be called then call is aborted
-                throw new CommandException("commands.generic.permission");
-            }
-        }
-        */
+         * // Check if the player has access to the command using the firstpermissionbreach method first
+         * Method permMethod = firstPermissionBreaches.get(permission);
+         * if(permMethod != null) {
+         * Boolean result = true;
+         * try {
+         * result = (Boolean)permMethod.invoke(null, permission, sender);
+         * } catch (Exception e) {
+         * MyEssentialsCore.instance.LOG.error(ExceptionUtils.getStackTrace(e));
+         * }
+         * if(!result) {
+         * // If the first permission breach did not allow the method to be called then call is aborted
+         * throw new CommandException("commands.generic.permission");
+         * }
+         * }
+         */
 
         try {
-            CommandResponse response = (CommandResponse)method.invoke(null, sender, args);
-            if(response == CommandResponse.SEND_HELP_MESSAGE) {
+            CommandResponse response = (CommandResponse) method.invoke(null, sender, args);
+            if (response == CommandResponse.SEND_HELP_MESSAGE) {
                 int page = 1;
-                if(!args.isEmpty() && StringUtils.tryParseInt(args.get(0)))
-                    page = Integer.parseInt(args.get(0));
+                if (!args.isEmpty() && StringUtils.tryParseInt(args.get(0))) page = Integer.parseInt(args.get(0));
                 sendHelpMessage(sender, page);
-            } else if(response == CommandResponse.SEND_SYNTAX) {
+            } else if (response == CommandResponse.SEND_SYNTAX) {
                 sendSyntax(sender);
             }
         } catch (InvocationTargetException e) {
@@ -121,17 +128,17 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
 
     public List<String> getTabCompletionList(int argumentNumber, String argumentStart) {
         List<String> completion = new ArrayList<String>();
-        if(commandAnnot.completionKeys().length == 0) {
-            for(CommandTreeNode child : getChildren()) {
+        if (commandAnnot.completionKeys().length == 0) {
+            for (CommandTreeNode child : getChildren()) {
                 String localizedCommand = child.getLocalizedName();
-                if(localizedCommand.startsWith(argumentStart)) {
+                if (localizedCommand.startsWith(argumentStart)) {
                     completion.add(localizedCommand);
                 }
             }
         } else {
-            if(argumentNumber < commandAnnot.completionKeys().length) {
-                for(String s : CommandCompletion.getCompletionList(commandAnnot.completionKeys()[argumentNumber])) {
-                    if(s.startsWith(argumentStart)) {
+            if (argumentNumber < commandAnnot.completionKeys().length) {
+                for (String s : CommandCompletion.getCompletionList(commandAnnot.completionKeys()[argumentNumber])) {
+                    if (s.startsWith(argumentStart)) {
                         completion.add(s);
                     }
                 }
@@ -141,7 +148,7 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
     }
 
     public void sendHelpMessage(ICommandSender sender, int page) {
-        if(helpMenu == null) {
+        if (helpMenu == null) {
             helpMenu = new ChatComponentHelpMenu(9, this);
         }
         helpMenu.sendPage(sender, page);
@@ -164,11 +171,13 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
     }
 
     public CommandTreeNode getChild(String name) {
-        for(CommandTreeNode child : getChildren()) {
-            if(child.getLocalizedName().equals(name)) {
+        for (CommandTreeNode child : getChildren()) {
+            if (child.getLocalizedName()
+                .equals(name)) {
                 return child;
             } else {
-                for (String alias : child.getAnnotation().alias()) {
+                for (String alias : child.getAnnotation()
+                    .alias()) {
                     if (alias.equals(name)) {
                         return child;
                     }
@@ -179,10 +188,8 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
     }
 
     public String getCommandLine() {
-        if(getParent() == null)
-            return "/" + getLocalizedName();
-        else
-            return getParent().getCommandLine() + " " + getLocalizedName();
+        if (getParent() == null) return "/" + getLocalizedName();
+        else return getParent().getCommandLine() + " " + getLocalizedName();
     }
 
     public Local getLocal() {
@@ -192,10 +199,12 @@ public class CommandTreeNode extends TreeNode<CommandTreeNode> {
     public CommandTree getCommandTree() {
         CommandTreeNode node = this;
 
-        while(node.getParent() != null) {
+        while (node.getParent() != null) {
             node = node.getParent();
         }
 
-        return CommandManager.getTree(node.getAnnotation().permission());
+        return CommandManager.getTree(
+            node.getAnnotation()
+                .permission());
     }
 }

@@ -1,16 +1,20 @@
-// Add any additional repositories for your dependencies here
-
 repositories {
-    ivy {
-        url 'https://files.vexatos.com/'
-        patternLayout {
-            artifact "[module]/[artifact]-[revision](-[classifier])(.[ext])"
-        }
+    maven {
+        name 'GTNH Maven'
+        url 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
+        allowInsecureProtocol
+    }
+    maven {
+        url 'https://cursemaven.com'
         content {
-            includeGroup("TGregworks")
+            includeGroup 'curse.maven'
         }
-        metadataSources {
-            artifact()
-        }
+    }
+    maven {
+        url 'https://maven.elmakers.com/repository/'
+    }
+    maven {
+        name 'SpongePowered'
+        url 'https://repo.spongepowered.org/maven'
     }
 }

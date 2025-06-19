@@ -1,8 +1,8 @@
 // Add your dependencies here
 
 dependencies {
-    compile('com.github.GTNewHorizons:MyEssentials-Core:1.20r:dev')
+    implementation('com.github.GTNewHorizons:MyEssentials-Core:1.20r:dev')
 
-    compileOnly('com.forgeessentials:forgeessentials:1.4.6-SNAPSHOT:dev') {transitive = false}
+    compileOnly(rfg.deobf('maven.modrinth:forge-essentials:7.5.1')) {transitive = false}
     compileOnly('org.bukkit:bukkit:1.7.9-R0.2')
 }
